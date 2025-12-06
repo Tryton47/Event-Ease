@@ -8,13 +8,14 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 
 interface EventCardProps {
   event: Event;
+  id?: string;
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard({ event, id }: EventCardProps) {
   const isSoldOut = event.stock === 0;
 
   return (
-    <Card className="overflow-hidden flex flex-col h-full group hover:shadow-lg transition-shadow duration-300">
+    <Card id={id} className="overflow-hidden flex flex-col h-full group hover:shadow-lg transition-shadow duration-300">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <Image
           src={event.imageUrl}
@@ -61,8 +62,12 @@ export function EventCard({ event }: EventCardProps) {
         <div className="text-lg font-bold text-primary">
           {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(event.price)}
         </div>
-        <Button disabled={isSoldOut} className="w-1/3">
-          {isSoldOut ? "Habis" : "Beli"}
+        <Button asChild disabled={isSoldOut} className="w-1/3">
+          {isSoldOut ? (
+            <span>Habis</span>
+          ) : (
+            <Link href={`/events/${event.id}`}>Beli</Link>
+          )}
         </Button>
       </CardFooter>
     </Card>
